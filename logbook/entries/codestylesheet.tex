@@ -1,0 +1,147 @@
+This section is for us to agree upon best practices in coding.
+It's light at the moment.
+
+\subsection{Writing code in a new task}
+
+To create a new task, start by creating a new branch and following these steps:
+\begin{enumerate}
+\item
+Start by writing the \texttt{readme.md} in the task folder.
+What is the purpose of this task?
+What information/inputs does it rely upon (at a broad level, not filenames)?
+What outputs will it produce?
+\item
+Next, write the \texttt{Makefile}.
+This approaches \href{https://en.wikipedia.org/wiki/Pseudocode}{pseudocode}: you list specific input files, you name output files, and there are to-be-written scripts that will produce those outputs from those inputs.
+\item
+Write the scripts that implements the task.
+As you handle the data, you might realize that you need to revise the readme or Makefile.
+You might need to split the task into multiple tasks if the steps between inputs and outputs are more complicated than your initial outline revealed.
+\item
+If your task products outputs, write a logbook entry presenting them.
+Exhibits aren't self-presenting.
+\end{enumerate}
+
+\subsection{Language-free coding principles}
+
+\subsubsection{Other people's principles}
+
+\begin{itemize}
+	\item See chapter 6, chapter 7, and appendix A of Gentzkow and Shapiro's \href{https://web.stanford.edu/~gentzkow/research/CodeAndData.pdf}{Code and Data for the Social Sciences: A Practitioner’s Guide}.
+	\item QuantEcon's ``\href{https://julia.quantecon.org/getting_started_julia/introduction_to_types.html#A-Digression-on-Style-and-Naming}{A Digression on Style and Naming}''. Read their comments on the following:
+	\begin{itemize}
+	\item Code is read many more times than it is written
+	\item Write code to be read in the future, not today
+	\item Excess comments in code can make code harder to read
+	\item Maintain the correspondence between the whiteboard math and the code
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{Validate arguments}
+
+If a script takes arguments when called, they must be validated.
+When the argument are parsed at the top of the script,
+verify they are the right type (e.g.,~the number of regions must be an integer or an expenditure share must lie between~0 and~1).
+\begin{lstlisting}[language=julia]
+alpha = parse(Float64,ARGS[1])
+@assert 0 < alpha <= 1
+\end{lstlisting}
+
+\subsubsection{Cleaning data}
+
+I agree with \href{https://web.stanford.edu/~gentzkow/research/CodeAndData.xhtml}{Gentzkow and Shapiro}
+that you should keep data in normalized files as long as possible.
+\begin{quote}
+First, store your raw data in normalized files that preserve the information in the original data source and follows the rules above.
+Don't worry about how you plan to use the data.
+Rather, imagine that you are preparing the data for release to a broad group of users with differing needs.
+Do this because you, yourself, are likely to want to use the data in ways you do not currently anticipate.
+\end{quote}
+
+\subsubsection{Do not hardcode values}
+
+While I haven't fully embraced the \href{https://en.wikipedia.org/wiki/Functional_programming}{functional programming paradigm},
+I do think that it is a mistake to use global variables or to hardcode values within functions.
+See 
+Patrick Ball's \href{https://www.youtube.com/watch?v=ZSunU9GQdcI&t=36m43s}{argument} 
+and
+page 28 of Gentzkow and Shapiro's \href{https://web.stanford.edu/~gentzkow/research/CodeAndData.pdf}{Code and Data}.
+
+For example, sample selection decisions are arguments.
+Constants do not belong inside functions.
+Name them once, impose the value/criterion once, and then refer to that repeatedly within your function.
+\href{http://yaml.org/}{YAML} is a good format for constants.
+
+\subsection{Sharing code across machines}
+
+We almost always want to run code on multiple machines.
+Absolute file paths are problematic for shared code, because \texttt{/Users/jdingel/} is not a valid path for almost every computer on earth.
+Here are two possible means of making shared code run on many machines: 
+\begin{enumerate}
+	\item Set absolute file paths with conditional statements.
+	\item Use only relative file paths.
+\end{enumerate}
+
+I strongly prefer the latter.
+
+\subsubsection{Conditional absolute file paths}
+
+Conditional absolute file paths exploit environmental variables to identify the machine and then set absolute file paths based on that.
+For example, in Linux there is an environmental variable called \texttt{\$USER} at the shell command line.
+Similarly, elements of Stata's c-class, such as \texttt{`c(pwd)'} and \texttt{`c(hostname)'}, can be used to identify a machine 
+and then run user-specific programs that set global variable to user-specific values.\footnote{
+	Type \texttt{help creturn} in Stata for exhaustive documentation of the available arguments.
+}
+Here is a brief example in Stata.
+\begin{lstlisting}[language=stata]
+if "`c(os)'"=="Unix" & regexm("`c(hostname)'","midway")==1 {
+	display "Running on RCC Midway server"
+	global root "/project/xxx/xxxyyy/xyz_repo"
+}
+\end{lstlisting}
+
+\subsubsection{Relative file paths}
+
+Relative file paths work on any machine because they are relative.
+In Jonathan's opinion, this is generally preferable.
+It means that code can be cloned onto a new machine by any user and run immediately without having to write new user-specific code.
+See \url{https://github.com/jdingel/DavisDingelMonrasMorales} for an example of a repository that only uses relative paths.
+
+\href{https://help.github.com/articles/about-readmes/\#relative-links-and-image-paths-in-readme-files}{GitHub} agrees:
+``Relative links are easier for users who clone your repository. Absolute links may not work in clones of your repository - we recommend using relative links to refer to other files within your repository.''
+
+\subsubsection{Package management}
+
+Package dependencies should be identified by \texttt{requirements.txt} (Python), \texttt{Manifest.toml} (Julia), and so forth.
+Stata lacks a built-in package-dependency management tool.
+I just write a do file that installs all the packages, but there is no official requirements/manifest file.
+My understanding is that R doesn't do package management properly natively.
+I think you want something like ``packrat", but I have never used this myself.
+
+These requirements should be committed to the repo so that anyone cloning the repo on a new machine has everything they need defined.
+This is also \href{https://aeadataeditor.github.io/aea-de-guidance/preparing-for-data-deposit.html}{AEA journal policy}:
+``packages/modules/etc. ... provide a setup program to install these (not manual instructions).''
+
+I tend to write package-installation scripts in a distinct task that covers all packages used in the project.
+The best reason to concentrate everything in one task is that oftentimes package installation requires internet access:
+on some computing clusters, login nodes can touch the external internet, while compute nodes cannot.
+
+\subsection{Limit lines to at most 100 characters}
+
+Files should have lines no longer than 100 characters in length.
+This is true both for code and \TeX.
+The commands \texttt{diff} and \texttt{git diff} report lines that differ between files/commits.
+Really long lines of code therefore can be a nightmare, since one may have to scroll quite far to spot a change.
+This is really painful if a line is actually a full paragraph of text.
+Writing each new sentence on a separate line makes it much easier to view changesets.
+
+See \href{https://en.wikibooks.org/wiki/LaTeX/Collaborative_Writing_of_LaTeX_Documents\#Subversion_really_makes_the_difference}{Directives for using LaTeX with version control systems}
+\begin{itemize}
+\item Do not change line breaks without good reason.
+\item Turn off automatic line wrapping of your LaTeX editor.
+\item Start each new sentence in a new line.
+\item Split long sentences into several lines so that each line has at most about 80 characters.
+\item Verify that your code can be compiled flawlessly before committing your modifications to the repository.
+\item Use diff to critically review your modifications before committing them to the repository.
+\item Add a meaningful and descriptive comment when committing your modifications to the repository.
+\end{itemize}

@@ -1,0 +1,9 @@
+tasks/*/input
+tasks/*/temp
+tasks/*/output
+
+logbook/input
+logbook/logbook.pdf
+
+*.log
+.DS_Store
