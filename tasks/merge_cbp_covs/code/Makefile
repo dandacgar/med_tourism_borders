@@ -1,5 +1,6 @@
 all: $(addprefix ../output/, \
-	dentists_cbp_covariates.dta)
+	dentists_cbp_covariates.dta \
+	amb_health_services_cbp_covariates.dta)
 
 include ../../generic.make
 
@@ -12,8 +13,8 @@ BORDERS := $(addprefix ../input/, \
 	counties_bordering_canada_mexico.dta \
 	counties_from_mexico_border.dta)
 
-../output/dentists_cbp_covariates.dta: merge_cbp_dentists.do ../input/cbp23co.dta $(COVS) $(BORDERS) | ../output
-	stata-se -e $<
+../output/%_cbp_covariates.dta: merge_cbp_dentists.do ../input/cbp23co.dta $(COVS) $(BORDERS) | ../output
+	stata-se -e $< $*
 
 $(COVS): ../input/%: ../../county_covariates/output/% | ../input
 	ln -s $< $@

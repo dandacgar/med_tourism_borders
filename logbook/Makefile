@@ -34,3 +34,11 @@ input/cbp_dentist_regs_adj5_counties.tex: ../tasks/cbp_regressions/output/cbp_de
 	ln -s ../$< $@
 input/cbp_dentist_regs_dummies_adj5_counties.tex: ../tasks/cbp_regressions/output/cbp_dentist_regs_dummies_adj5_counties.tex | input
 	ln -s ../$< $@
+input/dentists_emp_pc_border.png: ../tasks/county_maps/output/dentists_emp_pc_border.png | input
+	ln -s ../$< $@
+input/dentists_estabs_pc_border.png: ../tasks/county_maps/output/dentists_estabs_pc_border.png | input
+	ln -s ../$< $@
+input/amb_health_services_emp_pc_border.png: ../tasks/county_maps/output/amb_health_services_emp_pc_border.png | input
+	ln -s ../$< $@
+input/amb_health_services_estabs_pc_border.png: ../tasks/county_maps/output/amb_health_services_estabs_pc_border.png | input
+	ln -s ../$< $@
