@@ -1,0 +1,86 @@
+\subsection{U.S. Employment and Establishment Data}
+The \href{https://www.census.gov/programs-surveys/cbp/data/datasets.html}{County Business Patterns} (CBP), \href{https://www.bls.gov/cew/downloadable-data-files.htm}{Quarterly Census of Employment and Wages} (QCEW), and \href{https://www.census.gov/data/developers/data-sets/qwi.html}{Quarterly Workforce Indicators} (QWI) are public datasets of United States employment and/or establishment counts by county FIPS codes.
+
+The CBP provides annual employment, payroll, and establishment counts by county, with the latter further subdivided into number of establishments by establishment size (number of employees) classes.
+Furthermore, this dataset groups these variables by 6-digit NAICS code.
+
+The QCEW offers quarterly employment, wages, and establishment counts by county as well.
+Unlike the CBP, however, these data do not differentiate establishment counts by establishment size classes, instead offering the total number of establishments in a county regardless of employee size.
+Furthermore, this dataset also groups these variables by 4-digit NAICS code.
+More granular (i.e. 6-digit) NAICS codes are available at larger geographic levels, such as by state/CSA.
+
+Unlike the other two datasets, the QWI offers employment, hires, separations, and wages by both worker demographics (such as sex, age, and race/ethnicity) and firm characteristics (such age, size, and industry). 
+However, these data do not have establishment counts and only aggregate up to 4-digit NAICS codes.
+
+The respective granularity of the above U.S. datasets are summarized in the following table:
+\begin{table}[H]
+    \centering
+    \caption{U.S. Data Summary}
+    
+    \begin{tabular}{l|c|c|c|c|c|c|c}
+    \toprule
+     Dataset & Frequency & NAICS & Emp. & Estabs. & Estabs. Size & Firm Size & Demographics \\
+     \midrule
+     CBP    & Annual & 6-digit & Yes & Yes & Yes & No & No \\
+     QCEW   & Quarterly & 4-digit* & Yes & Yes & No & No & No \\ 
+     QWI    & Quarterly & 4-digit & Yes & No & No & Yes & Yes \\
+    \bottomrule
+    \end{tabular}
+    \begin{flushleft}
+        \begin{footnotesize}
+        * 6-digit NAICS possible if using geography larger than county
+        \end{footnotesize}
+    \end{flushleft}
+\end{table}
+
+\subsection{Mexico Employment and Establishment Data}
+The following candidate analogous Mexico datasets all come from \href{https://en.www.inegi.org.mx/}{Instituto Nacional de Estadística y Geografía} (INEGI). 
+Arguably, the most similar geographic division in Mexico to the United States county is the \href{https://en.wikipedia.org/wiki/Municipalities_of_Mexico}{municipio}, of which there are 2,478 in the country.
+This narrows my search down to publicly available Mexican data that offer municipio-level employment and/or establishment counts.
+
+The \href{https://en.www.inegi.org.mx/programas/ce/2024/#documentation}{Censos Económicos} (CE) have reasonably detailed snapshots of employment, wages, and revenues at the municipio level that are published every 5 years, with the last publication in 2024.
+Their \href{https://en.www.inegi.org.mx/app/descarga/?p=3366}{pre-made tables and indicators} (i.e. summary statistics) are too coarse in either the geographic or sectoral dimension.
+Fortunately, the CE have a \href{https://en.www.inegi.org.mx/app/saic/default.html}{online tool} to select various statistics (such as employment and wages) up to the 6-digit NAICS codes, which can then be exported as a table.
+Once the correct parameters are chosen, the specified data can be exported as a CSV file.
+The \href{https://en.www.inegi.org.mx/contenidos/app/saic/saic_historico_metodologico_ce2024.pdf}{documentation} mentions, however, that there is censoring when there are less than three establishments in the selected cell (geography $\times$ NAICS).
+The CE's closest U.S. analog is the CBP as both offer employment and wage statistics up to 6-digit NAICS, although the former is five times less frequent.
+
+The \href{https://en.www.inegi.org.mx/programas/ilmm/#documentation}{Indicadores Laborales para los Municipios de México} (ILMM) provides annual employment counts (in the informal and formal sectors) for each municipio on an annual basis.
+The data also provide municipio-level demographics such as total population, population over 60, and male/female ratio.
+These data, however, lack any industry deaggration, nor do they provide firm or establishment counts.
+Since the ILMM provides the most aggregated statistics (such as total employment) without any industry deaggregation, it includes all municipios in Mexico without any censoring issues.
+The ILMM is most similar to the U.S. QWI.
+
+The \href{https://en.www.inegi.org.mx/app/descarga/}{Directorio Estadístico Nacional de Unidades Económicas} (DENUE) are annual records of more than 6 million business establishments in Mexico. 
+Their records include the name of the establishment, NAICS code, municipio, and number of employees.
+They even include latitude/longitudes of the establishments (no need for Google Maps API calls!!).
+The DENUE uses the EC (mentioned above) as the main source of establishment data, which is collected via interviews and records of all active establishments during the EC census year.
+In the interceding years, the DENUE uses administrative data to make updates.
+The documentation states that the DENUE is not meant to be a representative survey using a subsample of Mexican establishments, rather, it is meant to be an exhaustive list of all official businesses in Mexico.
+The DENUE does censor some identifiable information about the establishments (like any identifiable personal information).
+This is mostly relevant for single proprietors as DENUE will censor their names.
+However, geographic and NAICS codes are not censored.
+Since these data do not directly provide employment counts and focus more on the establishments, these data are most analogous to the U.S. CBP.
+
+In my opinion, I think the best use of these data would be to use both the CE and DENUE for outcome variables, and the ILMM to gather simple demographic controls.
+The CE would provide municipio-level employment at the industry granularity of 6-digit NAICS codes, with the caveat that these are collected every five years.
+The DENUE offers establishment counts at the municipio-level, also at 6-digit NAICS code granularity, with the added benefit of being annual data.
+The ILMM would give coarse age-block demographics (such as prop. over 60) as well as population and male-female ratio.
+
+The datasets are summarized in the following table:
+
+\begin{table}[H]
+    \centering
+    \caption{Mexico Data Summary}
+    
+    \begin{tabular}{l|c|c|c|c|c|c|c}
+    \toprule
+     Dataset & Frequency & NAICS & Emp. & Estabs. & Estabs. Size & Firm Size & Demographics \\
+     \midrule
+     CE    & Semi-Decadal & 6-digit & Yes & No & No & No & No \\
+     ILMM   & Annual & N/A & Yes & No & No & No & Yes \\ 
+     DENUE    & Annual & 6-digit & No & Yes & Yes & No & No \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
