@@ -87,7 +87,7 @@ esttab sr2_* using "../output/cbp_dentist_regs_adj_counties.tex", se s(N mean st
 
 esttab sr3_* using "../output/cbp_dentist_regs_adj5_counties.tex", se s(N mean state_fe, labels("N" "Mean" "State FE")) nocons label nomtitles booktabs nonotes addnotes("Standard errors in parentheses. Mean refers to original (non-logged) outcome variable." "* p<0.05, ** p<0.01, *** p<0.001") replace
 
-esttab sr3dummies_* using "../output/cbp_dentist_regs_dummies_adj5_counties.tex", se s(N mean state_fe, labels("N" "Mean" "State FE")) nocons label nomtitles nobaselevels booktabs addnotes("Standard errors in parentheses. Mean refers to original (non-logged) outcome variable." "* p<0.05, ** p<0.01, *** p<0.001") replace
+esttab sr3dummies_* using "../output/cbp_dentist_regs_dummies_adj5_counties.tex", se s(N mean state_fe, labels("N" "Mean" "State FE")) nocons label nomtitles nobaselevels booktabs nonotes addnotes("Standard errors in parentheses. Mean refers to original (non-logged) outcome variable." "* p<0.05, ** p<0.01, *** p<0.001") replace
 
 
 
