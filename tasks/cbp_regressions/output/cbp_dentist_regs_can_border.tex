@@ -1,0 +1,40 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{6}{c}}
+\toprule
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         &\multicolumn{1}{c}{(6)}         \\
+\midrule
+Borders Mexico      &      -0.346\sym{*}  &      -0.292         &      -0.230         &      -0.301         &      -0.391         &     -0.0343         \\
+                    &     (-2.40)         &     (-1.88)         &     (-1.43)         &     (-1.49)         &     (-1.94)         &     (-0.08)         \\
+\addlinespace
+Log Population      &                     &       0.209\sym{*}  &       0.205\sym{*}  &       0.211         &       0.240\sym{*}  &       0.200         \\
+                    &                     &      (2.07)         &      (2.05)         &      (2.01)         &      (2.33)         &      (1.82)         \\
+\addlinespace
+Log Pop. Density    &                     &      -0.145         &      -0.114         &      -0.147         &      -0.139         &      -0.133         \\
+                    &                     &     (-1.80)         &     (-1.37)         &     (-1.69)         &     (-1.64)         &     (-1.45)         \\
+\addlinespace
+Log Median. HH Income&                     &       1.167\sym{***}&       1.442\sym{***}&       1.162\sym{**} &       1.578\sym{***}&       1.461\sym{**} \\
+                    &                     &      (3.60)         &      (3.79)         &      (3.49)         &      (4.04)         &      (3.34)         \\
+\addlinespace
+Proportion 25-54    &                     &                     &      -7.616         &                     &      -14.11         &      -14.66         \\
+                    &                     &                     &     (-1.35)         &                     &     (-1.89)         &     (-1.94)         \\
+\addlinespace
+Proportion 55+      &                     &                     &                     &      -0.175         &      -4.210         &      -6.173         \\
+                    &                     &                     &                     &     (-0.07)         &     (-1.31)         &     (-1.55)         \\
+\addlinespace
+Proportion Black    &                     &                     &                     &                     &                     &       0.720         \\
+                    &                     &                     &                     &                     &                     &      (0.57)         \\
+\addlinespace
+Proportion Hispanic &                     &                     &                     &                     &                     &      -0.591         \\
+                    &                     &                     &                     &                     &                     &     (-0.84)         \\
+\addlinespace
+Constant            &      -8.902\sym{***}&      -23.68\sym{***}&      -25.47\sym{***}&      -23.62\sym{***}&      -25.38\sym{***}&      -23.20\sym{***}\\
+                    &   (-107.93)         &     (-6.89)         &     (-6.98)         &     (-6.55)         &     (-7.01)         &     (-4.98)         \\
+\midrule
+N                   &          46         &          46         &          46         &          46         &          46         &          46         \\
+State FE            &          No         &          No         &          No         &          No         &          No         &          No         \\
+\bottomrule
+\multicolumn{7}{l}{\footnotesize \textit{t} statistics in parentheses}\\
+\multicolumn{7}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\end{tabular}
+}

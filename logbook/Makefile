@@ -26,3 +26,11 @@ clean:
 find_inputs: 
 	./find_inputs.sh $(logbookinputs)
 
+input/cbp_dentist_regs_can_border.tex: ../tasks/cbp_regressions/output/cbp_dentist_regs_can_border.tex | input
+	ln -s ../$< $@
+input/cbp_dentist_regs_adj_counties.tex: ../tasks/cbp_regressions/output/cbp_dentist_regs_adj_counties.tex | input
+	ln -s ../$< $@
+input/cbp_dentist_regs_adj5_counties.tex: ../tasks/cbp_regressions/output/cbp_dentist_regs_adj5_counties.tex | input
+	ln -s ../$< $@
+input/cbp_dentist_regs_dummies_adj5_counties.tex: ../tasks/cbp_regressions/output/cbp_dentist_regs_dummies_adj5_counties.tex | input
+	ln -s ../$< $@
