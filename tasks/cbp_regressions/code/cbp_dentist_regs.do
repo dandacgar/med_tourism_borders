@@ -1,8 +1,10 @@
 use "../input/dentists_cbp_covariates.dta", clear
 
 // Outcome Variables
-gen ln_dentist_emp_pc = ln(emp/pop_total)
-gen ln_dentist_estabs_pc = ln(estabs/pop_total)
+gen dentist_emp_pc = emp/pop_total
+gen dentist_estabs_pc = estabs/pop_total
+gen ln_dentist_emp_pc = ln(dentist_emp_pc)
+gen ln_dentist_estabs_pc = ln(dentist_estabs_pc)
 
 // Control Variables
 gen ln_density = ln(pop_total/landarea)
@@ -50,34 +52,42 @@ local controls5 `controls4' prop_black prop_hispanic
 
 // Regressions
 
-local outcome ln_dentist_emp_pc
+local outcome dentist_emp_pc
 eststo clear
 
 foreach controls in controls0 controls1 controls2 controls3 controls4 controls5 {
-reghdfe `outcome' mexico_border ``controls'' if sr1 == 1, noabsorb
+reghdfe ln_`outcome' mexico_border ``controls'' if sr1 == 1, noabsorb
 estadd local state_fe "No"
+sum `outcome' if sr1 == 1
+estadd local mean `=string(`r(mean)', "%9.3g")'
 eststo sr1_`controls'
 
-reghdfe `outcome' mexico_border ``controls'' if sr2 == 1, absorb(state_FIPS)
+reghdfe ln_`outcome' mexico_border ``controls'' if sr2 == 1, absorb(state_FIPS)
 estadd local state_fe "Yes"
+sum `outcome' if sr2 == 1
+estadd local mean `=string(`r(mean)', "%9.3g")'
 eststo sr2_`controls'
 
-reghdfe `outcome' mexico_border ``controls'' if sr3 == 1, absorb(state_FIPS)
+reghdfe ln_`outcome' mexico_border ``controls'' if sr3 == 1, absorb(state_FIPS)
 estadd local state_fe "Yes"
+sum `outcome' if sr3 == 1
+estadd local mean `=string(`r(mean)', "%9.3g")'
 eststo sr3_`controls'
 
-reghdfe `outcome' ib5.counties_from_border ``controls'' if sr3 == 1, absorb(state_FIPS)
+reghdfe ln_`outcome' ib5.counties_from_border ``controls'' if sr3 == 1, absorb(state_FIPS)
 estadd local state_fe "Yes"
+sum `outcome' if sr3 == 1
+estadd local mean `=string(`r(mean)', "%9.3g")'
 eststo sr3dummies_`controls'
 }
 
-esttab sr1_* using "../output/cbp_dentist_regs_can_border.tex", s(N state_fe, labels("N" "State FE")) label nomtitles booktabs replace
+esttab sr1_* using "../output/cbp_dentist_regs_can_border.tex", se s(N mean state_fe, labels("N" "Mean" "State FE")) nocons label nomtitles booktabs nonotes addnotes("Standard errors in parentheses. Mean refers to original (non-logged) outcome variable." "* p<0.05, ** p<0.01, *** p<0.001") replace
 
-esttab sr2_* using "../output/cbp_dentist_regs_adj_counties.tex", s(N state_fe, labels("N" "State FE")) label nomtitles booktabs replace
+esttab sr2_* using "../output/cbp_dentist_regs_adj_counties.tex", se s(N mean state_fe, labels("N" "Mean" "State FE")) nocons label nomtitles booktabs nonotes addnotes("Standard errors in parentheses. Mean refers to original (non-logged) outcome variable." "* p<0.05, ** p<0.01, *** p<0.001") replace
 
-esttab sr3_* using "../output/cbp_dentist_regs_adj5_counties.tex", s(N state_fe, labels("N" "State FE"))label nomtitles booktabs replace
+esttab sr3_* using "../output/cbp_dentist_regs_adj5_counties.tex", se s(N mean state_fe, labels("N" "Mean" "State FE")) nocons label nomtitles booktabs nonotes addnotes("Standard errors in parentheses. Mean refers to original (non-logged) outcome variable." "* p<0.05, ** p<0.01, *** p<0.001") replace
 
-esttab sr3dummies_* using "../output/cbp_dentist_regs_dummies_adj5_counties.tex", s(N state_fe, labels("N" "State FE")) label nomtitles nobaselevels booktabs replace
+esttab sr3dummies_* using "../output/cbp_dentist_regs_dummies_adj5_counties.tex", se s(N mean state_fe, labels("N" "Mean" "State FE")) nocons label nomtitles nobaselevels booktabs addnotes("Standard errors in parentheses. Mean refers to original (non-logged) outcome variable." "* p<0.05, ** p<0.01, *** p<0.001") replace
 
 
 
