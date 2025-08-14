@@ -50,7 +50,7 @@ local controls5 `controls4' prop_black prop_hispanic
 
 // Regressions
 
-local outcome ln_dentist_estabs_pc
+local outcome ln_dentist_emp_pc
 eststo clear
 
 foreach controls in controls0 controls1 controls2 controls3 controls4 controls5 {
@@ -71,13 +71,13 @@ estadd local state_fe "Yes"
 eststo sr3dummies_`controls'
 }
 
-esttab sr1_* using "../output/cbp_dentist_regs_can_border.tex", s(N state_fe, labels("N" "State FE")) label nomtitles booktabs
+esttab sr1_* using "../output/cbp_dentist_regs_can_border.tex", s(N state_fe, labels("N" "State FE")) label nomtitles booktabs replace
 
-esttab sr2_* using "../output/cbp_dentist_regs_adj_counties.tex", s(N state_fe, labels("N" "State FE")) label nomtitles booktabs
+esttab sr2_* using "../output/cbp_dentist_regs_adj_counties.tex", s(N state_fe, labels("N" "State FE")) label nomtitles booktabs replace
 
-esttab sr3_* using "../output/cbp_dentist_regs_adj5_counties.tex", s(N state_fe, labels("N" "State FE"))label nomtitles booktabs
+esttab sr3_* using "../output/cbp_dentist_regs_adj5_counties.tex", s(N state_fe, labels("N" "State FE"))label nomtitles booktabs replace
 
-esttab sr3dummies_* using "../output/cbp_dentist_regs_dummies_adj5_counties.tex", s(N state_fe, labels("N" "State FE")) label nomtitles nobaselevels booktabs
+esttab sr3dummies_* using "../output/cbp_dentist_regs_dummies_adj5_counties.tex", s(N state_fe, labels("N" "State FE")) label nomtitles nobaselevels booktabs replace
 
 
 
