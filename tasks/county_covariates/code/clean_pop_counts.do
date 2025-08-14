@@ -6,7 +6,7 @@ keep if year == 5 // 5 corresponds to July 2023
 // Generate County FIPS Variable
 gen county_FIPS = string(state *1000 + county, "%05.0f")
 
-// Total, Black, and Asian Population
+// Total, Black, and Hispanic Population
 preserve
 collapse (sum) pop_total=tot_pop bac_male bac_female h_male h_female, by(county_FIPS)
 
@@ -15,8 +15,8 @@ gen pop_hispanic = h_male + h_female // Using Hispanic (any) definition
 
 keep county_FIPS pop_total pop_black pop_hispanic
 
-tempfile tba_pops
-save `tba_pops'
+tempfile tbh_pops
+save `tbh_pops'
 restore
 
 // Prime-Age (25-54) Population
@@ -42,7 +42,7 @@ save `older_pops'
 restore
 
 // Merge
-use `tba_pops', clear
+use `tbh_pops', clear
 merge 1:1 county_FIPS using `prime_pops', nogen
 merge 1:1 county_FIPS using `older_pops', nogen
 
