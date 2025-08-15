@@ -42,3 +42,5 @@ input/amb_health_services_emp_pc_border.png: ../tasks/county_maps/output/amb_hea
 	ln -s ../$< $@
 input/amb_health_services_estabs_pc_border.png: ../tasks/county_maps/output/amb_health_services_estabs_pc_border.png | input
 	ln -s ../$< $@
+input/counties_from_border.png: ../tasks/county_maps/output/counties_from_border.png | input
+	ln -s ../$< $@
